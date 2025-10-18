@@ -1,11 +1,12 @@
 /**
  * confetti.js - Lightweight vanilla JS confetti cannon for UX delight.
- * No deps, CSS-accelerated particles.
+ * No deps, CSS-accelerated particles. Expanded with shapes, gravity, spread.
  * Usage: launchConfetti(element, options)
+ * @version 3.0.0
  */
 const launchConfetti = (
   target = document.body,
-  { count = 100, colors = ["#f7931e", "#60a5fa", "#10b981", "#f87171"] } = {}
+  { count = 150, colors = ["#f7931e", "#60a5fa", "#10b981", "#f87171", "#a78bfa"], spread = 60, gravity = 0.08 } = {}
 ) => {
   const canvas = document.createElement("canvas");
   canvas.style.position = "fixed";
@@ -20,17 +21,20 @@ const launchConfetti = (
   const ctx = canvas.getContext("2d");
   const particles = [];
 
-  // Create particles
+  // Create particles - Expanded with random shapes (square/rect)
   for (let i = 0; i < count; i++) {
     particles.push({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height - canvas.height,
-      size: Math.random() * 5 + 5,
-      speedX: Math.random() * 3 - 1.5,
-      speedY: Math.random() * 3 + 2,
+      size: Math.random() * 6 + 6,
+      width: Math.random() * 8 + 4, // For rect
+      height: Math.random() * 8 + 4, // For rect
+      speedX: (Math.random() * spread - spread / 2) / 10,
+      speedY: Math.random() * 3 + 3,
       color: colors[Math.floor(Math.random() * colors.length)],
       rotation: Math.random() * 360,
-      rotationSpeed: Math.random() * 10 - 5,
+      rotationSpeed: Math.random() * 12 - 6,
+      shape: Math.random() > 0.5 ? "square" : "rect", // Expanded
     });
   }
 
@@ -41,15 +45,19 @@ const launchConfetti = (
       ctx.save();
       ctx.translate(p.x, p.y);
       ctx.rotate((p.rotation * Math.PI) / 180);
-      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+      if (p.shape === "square") {
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+      } else {
+        ctx.fillRect(-p.width / 2, -p.height / 2, p.width, p.height);
+      }
       ctx.restore();
 
       p.x += p.speedX;
       p.y += p.speedY;
       p.rotation += p.rotationSpeed;
-      p.speedY += 0.05; // Gravity
+      p.speedY += gravity; // Expanded gravity
 
-      if (p.y > canvas.height) particles.splice(i, 1); // Remove fallen
+      if (p.y > canvas.height + p.size) particles.splice(i, 1); // Remove fallen
     });
 
     if (particles.length > 0) requestAnimationFrame(animate);

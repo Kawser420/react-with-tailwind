@@ -14,6 +14,7 @@ dist
 
 # misc
 .DS_Store
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -26,10 +27,21 @@ yarn-error.log*
 # IDE
 .vscode
 .idea
+*.sublime-*
 
 # OS
 Thumbs.db
+ehthumbs.db
 
 # New Utils (if generated)
 *.log
+*.map
 service-worker.js.map
+*.cache
+
+# Build Artifacts
+public/build
+src/serviceWorker.js
+
+# Performance Reports
+performance-reports/

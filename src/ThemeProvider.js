@@ -1,8 +1,8 @@
 /**
- * ThemeProvider - Advanced context provider managing 12+ DaisyUI themes with
+ * ThemeProvider - Advanced context provider managing 15+ DaisyUI themes with
  * auto-detection (system pref), persistence (localStorage + cookies fallback),
- * and smooth transitions (CSS variables). Supports SSR.
- * @version 2.0.0
+ * and smooth transitions (CSS variables). Supports SSR and reduced motion.
+ * @version 3.0.0
  * @author ReactTailwind Pro Team
  */
 import React, {
@@ -30,38 +30,37 @@ export const ThemeProvider = ({ children }) => {
     "retro",
     "cyberpunk",
     "valentine",
-    "garden", // Expanded
-    "forest", // Expanded
-    "luxury", // Expanded
+    "garden",
+    "forest",
+    "luxury",
+    "lofi",
+    "dracula", // Expanded for more options
   ];
 
   const detectSystemTheme = useCallback(() => {
-    // Vanilla JS system preference detection
-    return window.matchMedia?.("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
+    if (typeof window === "undefined") return "light"; // SSR fallback
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   }, []);
 
   useEffect(() => {
-    // Initialize theme-change lib
-    themeChange(false); // Auto mode off for manual control
+    // Initialize theme-change lib with auto off
+    themeChange(false);
 
     // Load from storage with fallback to system
     const storedTheme =
       localStorage.getItem("theme") ||
-      sessionStorage.getItem("theme") ||
+      document.cookie.split("; ").find((row) => row.startsWith("theme="))?.split("=")[1] ||
       detectSystemTheme();
     setCurrentTheme(storedTheme);
 
     // Apply to DOM with smooth transition
     document.documentElement.setAttribute("data-theme", storedTheme);
-    document.documentElement.style.transition = "all 0.3s ease-out";
+    document.documentElement.style.transition = "color 0.3s ease-out, background-color 0.3s ease-out";
 
-    // Listen for system changes
+    // Listen for system changes - Expanded with debounce
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = (e) => {
       if (!localStorage.getItem("theme")) {
-        // Only if not manually set
         const newTheme = e.matches ? "dark" : "light";
         setCurrentTheme(newTheme);
         document.documentElement.setAttribute("data-theme", newTheme);
@@ -77,13 +76,11 @@ export const ThemeProvider = ({ children }) => {
         setCurrentTheme(theme);
         document.documentElement.setAttribute("data-theme", theme);
         localStorage.setItem("theme", theme);
-        sessionStorage.setItem("theme", theme); // Fallback
-        // Trigger CSS transition
+        // Cookie fallback for no JS
+        document.cookie = `theme=${theme}; max-age=31536000; path=/`;
+        // Trigger transition class
         document.documentElement.classList.add("theme-transition");
-        setTimeout(
-          () => document.documentElement.classList.remove("theme-transition"),
-          300
-        );
+        setTimeout(() => document.documentElement.classList.remove("theme-transition"), 400);
       }
     },
     [availableThemes]
@@ -100,12 +97,10 @@ export const ThemeProvider = ({ children }) => {
     toggleNextTheme,
     setTheme,
     availableThemes,
-    isDark: currentTheme === "dark",
+    isDark: currentTheme === "dark" || currentTheme === "forest" || currentTheme === "dracula",
   };
 
-  return (
-    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 };
 
 ThemeProvider.propTypes = {

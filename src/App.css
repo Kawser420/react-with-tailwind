@@ -3,7 +3,7 @@
   min-height: 100vh;
 }
 
-/* Legacy Logo Animation - Kept for compatibility */
+/* Legacy Logo Animation - Kept for compatibility and expanded for smoothness */
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -39,17 +39,17 @@
   }
 }
 
-/* World-Class Global Styles */
+/* World-Class Global Styles - Expanded with CSS3 transforms and transitions */
 .App > * {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform, opacity;
+  will-change: transform, opacity, box-shadow;
 }
 
-/* Custom CSS3 Animations & Transforms */
-@keyframes fadeIn {
+/* Custom CSS3 Animations & Transforms - More advanced with easing */
+@keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateY(20px) scale(0.95);
+    transform: translateY(50px) scale(0.95);
   }
   to {
     opacity: 1;
@@ -75,10 +75,10 @@
     transform: translateY(0);
   }
   40% {
-    transform: translateY(-10px);
+    transform: translateY(-15px);
   }
   60% {
-    transform: translateY(-5px);
+    transform: translateY(-7px);
   }
 }
 
@@ -89,7 +89,7 @@
     transform: scale(1);
   }
   50% {
-    opacity: 0.5;
+    opacity: 0.6;
     transform: scale(1.05);
   }
 }
@@ -100,39 +100,39 @@
     transform: translateX(0);
   }
   25% {
-    transform: translateX(-5px);
+    transform: translateX(-7px);
   }
   75% {
-    transform: translateX(5px);
+    transform: translateX(7px);
   }
 }
 
 @keyframes ripple-animation {
   to {
-    transform: scale(4);
+    transform: scale(5);
     opacity: 0;
   }
 }
 
-/* Utility Classes */
+/* Utility Classes - Expanded for responsiveness */
 .animate-fade-in {
-  animation: fadeIn 0.6s ease-out forwards;
+  animation: fade-in 0.8s ease-out forwards;
 }
 
 .animate-spin-slow {
-  animation: spin-slow 3s linear infinite;
+  animation: spin-slow 4s linear infinite;
 }
 
 .animate-bounce-slow {
-  animation: bounce-slow 2s infinite ease-in-out;
+  animation: bounce-slow 2.5s infinite ease-in-out;
 }
 
 .animate-pulse-gentle {
-  animation: pulse-gentle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse-gentle 3.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .animate-shake {
-  animation: shake 0.5s ease-in-out;
+  animation: shake 0.6s ease-in-out;
 }
 
 .gradient-text {
@@ -147,28 +147,30 @@
 }
 
 .hover-scale {
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.4s ease-in-out, box-shadow 0.4s;
 }
 
 .hover-scale:hover {
   transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Parallax Layer */
+/* Parallax Layer - Enhanced with 3D */
 .parallax-layer {
-  transition: transform 0.1s ease-out;
+  transition: transform 0.15s ease-out;
+  transform-style: preserve-3d;
 }
 
 .parallax-layer:hover {
-  transform: translateY(-5px) scale(1.02);
+  transform: translateY(-10px) scale(1.03) rotateX(5deg);
 }
 
-/* DaisyUI Overrides for Themes */
+/* DaisyUI Overrides for Themes - More customizations */
 [data-theme="dark"] .gradient-text {
   background: linear-gradient(135deg, #60a5fa, #a78bfa);
 }
 
-/* Reduced Motion Support */
+/* Reduced Motion Support - Professional accessibility */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -184,20 +186,30 @@
   }
 }
 
-/* Custom Scrollbar for Modern Look */
+/* Custom Scrollbar for Modern Look - Expanded for dark mode */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
   background: theme("colors.base-200");
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: theme("colors.primary.500");
-  border-radius: 4px;
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: theme("colors.primary.600");
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #3b82f6;
 }

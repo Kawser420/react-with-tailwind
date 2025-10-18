@@ -37,6 +37,13 @@
       "description": "View and select pricing options",
       "url": "/#pricing",
       "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Charts Dashboard",
+      "short_name": "Charts",
+      "description": "View interactive data visualizations",
+      "url": "/#charts",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
     }
   ]
 }

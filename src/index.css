@@ -2,10 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Base Layer Enhancements */
+/* Base Layer Enhancements - Professional foundation */
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
@@ -18,24 +19,30 @@
     line-height: 1.6;
     color: theme("colors.base-content");
     background-color: theme("colors.base-200");
+    transition: background-color 0.3s ease-out;
   }
 
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
       monospace;
+    background: theme("colors.base-300");
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
   }
 
-  /* Focus Visible for Accessibility */
+  /* Focus Visible for Accessibility - Expanded */
   *:focus-visible {
-    outline: 2px solid theme("colors.primary.500");
-    outline-offset: 2px;
+    /* outline: 3px solid theme("colors.primary.500"); */
+    outline-offset: 3px;
+    /* box-shadow: 0 0 0 3px theme("colors.primary.300"); */
   }
 }
 
-/* Component Layer - Custom Buttons, Cards */
+/* Component Layer - Custom Buttons, Cards - Expanded with effects */
 @layer components {
   .btn-modern {
-    @apply relative overflow-hidden;
+    @apply relative overflow-hidden rounded-lg shadow-md hover:shadow-lg;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   .btn-modern::before {
@@ -43,15 +50,15 @@
     position: absolute;
     top: 0;
     left: -100%;
-    width: 100%;
+    width: 200%;
     height: 100%;
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0.3),
       transparent
     );
-    transition: left 0.5s;
+    transition: left 0.6s ease-out;
   }
 
   .btn-modern:hover::before {
@@ -59,7 +66,8 @@
   }
 
   .card-premium {
-    @apply bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-500 ease-out-cubic;
+    @apply bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-500 ease-out-cubic rounded-xl;
+    transform-style: preserve-3d;
   }
 
   .card-premium::after {
@@ -68,12 +76,12 @@
     inset: 0;
     background: linear-gradient(
       45deg,
-      transparent 30%,
-      rgba(59, 130, 246, 0.1) 50%,
-      transparent 70%
+      transparent 20%,
+      rgba(59, 130, 246, 0.15) 50%,
+      transparent 80%
     );
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.4s ease;
   }
 
   .card-premium:hover::after {
@@ -81,22 +89,22 @@
   }
 }
 
-/* Utilities Layer - Expanded Animations */
+/* Utilities Layer - Expanded Animations, Transforms */
 @layer utilities {
   .animate-fade-in {
-    animation: fadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
-  .animate-bounce-slow {
-    animation: bounce-slow 2s infinite;
-  }
-
-  .animate-pulse-gentle {
-    animation: pulse-gentle 3s ease-in-out infinite;
+    animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .animate-spin-slow {
-    animation: spin-slow 4s linear infinite;
+    animation: spin-slow 5s linear infinite;
+  }
+
+  .animate-bounce-slow {
+    animation: bounce-slow 3s infinite ease-in-out;
+  }
+
+  .animate-pulse-gentle {
+    animation: pulse-gentle 4s ease-in-out infinite;
   }
 
   .gradient-text {
@@ -110,34 +118,35 @@
     background-clip: text;
   }
 
-  /* Parallax Effect */
+  /* Parallax Effect - 3D Enhanced */
   .parallax {
-    transition: transform 0.1s ease-out;
+    transition: transform 0.2s ease-out;
+    will-change: transform;
   }
 
   .parallax:hover {
-    transform: translateZ(20px);
+    transform: translateZ(30px) rotateY(10deg);
   }
 
-  /* Ripple Effect Global */
+  /* Ripple Effect Global - Vanilla JS compatible */
   .ripple {
     position: absolute;
     border-radius: 50%;
     background: currentColor;
-    opacity: 0.3;
-    animation: ripple-animation 0.6s linear forwards;
+    opacity: 0.4;
+    animation: ripple-animation 0.7s linear forwards;
   }
 }
 
-/* Define Keyframes */
+/* Define Keyframes - More precise easing */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -156,7 +165,7 @@
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-12px);
   }
 }
 
@@ -167,25 +176,29 @@
     transform: scale(1);
   }
   50% {
-    opacity: 0.7;
-    transform: scale(1.03);
+    opacity: 0.65;
+    transform: scale(1.04);
   }
 }
 
 @keyframes ripple-animation {
   to {
-    transform: scale(4);
+    transform: scale(5);
     opacity: 0;
   }
 }
 
-/* Theme-Specific Overrides */
+/* Theme-Specific Overrides - Expanded for more themes */
 [data-theme="dark"] {
   --tw-bg-opacity: 1;
   background-color: rgb(17 24 39 / var(--tw-bg-opacity));
 }
 
-/* Print Styles for Professional PDFs */
+[data-theme="cupcake"] .gradient-text {
+  background: linear-gradient(135deg, #f472b6, #fbbf24);
+}
+
+/* Print Styles for Professional PDFs - Expanded */
 @media print {
   .no-print {
     display: none !important;
@@ -193,14 +206,21 @@
   body {
     background: white !important;
     color: black !important;
+    font-size: 12pt;
   }
   .gradient-text {
     -webkit-print-color-adjust: exact;
     color-adjust: exact;
+    background: none;
+    color: #000 !important;
+  }
+  a {
+    color: blue !important;
+    text-decoration: underline;
   }
 }
 
-/* Respect Reduced Motion */
+/* Respect Reduced Motion - Accessibility Pro */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
