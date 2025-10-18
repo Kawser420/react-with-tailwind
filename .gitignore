@@ -1,47 +1,41 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-node_modules
+node_modules/
 /.pnp
 .pnp.js
 
 # testing
 /coverage
+/.nyc_output
+/jest-*.json
 
 # production
-build
-dist
+/build
+/dist
+*.min.js
 
 # misc
 .DS_Store
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
+.env*.local
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
 # IDE
-.vscode
-.idea
-*.sublime-*
+.vscode/
+.idea/
+*.swp
+*.swo
 
 # OS
 Thumbs.db
 ehthumbs.db
 
-# New Utils (if generated)
+# Logs
 *.log
-*.map
+logs/
+
+# New Utils/Generated
 service-worker.js.map
-*.cache
-
-# Build Artifacts
-public/build
-src/serviceWorker.js
-
-# Performance Reports
-performance-reports/
+public/fonts/*.woff2

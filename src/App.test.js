@@ -1,142 +1,181 @@
-// /**
-//  * App.test.js - Advanced Jest tests for world-class code quality.
-//  * Covers rendering, interactions, accessibility, edge cases, and responsiveness.
-//  * Uses testing-library for best practices.
-//  */
-// import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
-// import App from "./App";
-// import { ThemeProvider } from "./ThemeProvider";
+/**
+ * App.test.js - Comprehensive Jest tests for world-class code quality.
+ * Covers rendering, interactions, accessibility, edge cases, and new features like mega nav/transitions.
+ * @version 2.0.0
+ */
+import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import App from "./App";
+import { ThemeProvider } from "./ThemeProvider";
 
-// describe("App Integration Tests - Expanded for Full Coverage", () => {
-//   test("renders core components without crashing and checks accessibility", () => {
-//     render(
-//       <ThemeProvider>
-//         <App />
-//       </ThemeProvider>
-//     );
-//     expect(screen.getByText(/ReactTailwind Pro/i)).toBeInTheDocument();
-//     expect(screen.getByText(/Welcome to ReactTailwind Pro/i)).toBeInTheDocument();
-//     // Accessibility check
-//     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/Welcome/i);
-//   });
+describe("App Integration Tests", () => {
+  test("renders core components without crashing", () => {
+    render(
+      <ThemeProvider>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </ThemeProvider>
+    );
+    expect(screen.getByText(/ReactTailwind Pro/i)).toBeInTheDocument();
+    expect(screen.getByText(/Unlock World-Class UI Power/i)).toBeInTheDocument();
+  });
 
-//   test("navbar title, toggle, and mobile menu interact correctly", async () => {
-//     render(
-//       <ThemeProvider>
-//         <App />
-//       </ThemeProvider>
-//     );
-//     const title = screen.getByText(/ReactTailwind Pro/i);
-//     expect(title).toBeInTheDocument();
+  test("navbar title and toggle interact correctly", async () => {
+    render(
+      <ThemeProvider>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </ThemeProvider>
+    );
+    const title = screen.getByText(/ReactTailwind Pro/i);
+    expect(title).toBeInTheDocument();
 
-//     // Theme toggle
-//     const themeToggle = screen.getByLabelText(/Switch to next theme/i);
-//     fireEvent.click(themeToggle);
-//     await waitFor(() => expect(document.documentElement).toHaveAttribute("data-theme", expect.any(String)));
+    // Simulate theme toggle click
+    const toggleButton = screen.getByLabelText(/Switch to next theme/i);
+    fireEvent.click(toggleButton);
+    await waitFor(() => expect(toggleButton).toHaveAttribute("title", /Current: (dark|light)/i));
+  });
 
-//     // Mobile menu toggle
-//     const mobileToggle = screen.getByRole("button", { name: /Open menu/i });
-//     fireEvent.click(mobileToggle);
-//     await waitFor(() => expect(screen.getByRole("navigation")).toBeVisible());
-//     const closeButton = screen.getByRole("button", { name: /Close menu/i });
-//     fireEvent.click(closeButton);
-//     await waitFor(() => expect(screen.queryByRole("navigation")).not.toBeVisible());
-//   });
+  test("pricing header and cards render with interactions", async () => {
+    render(
+      <ThemeProvider>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </ThemeProvider>
+    );
+    const header = screen.getByText(/Unlock World-Class UI Power/i);
+    expect(header).toBeInTheDocument();
 
-//   test("pricing hero, toggle, and cards render and interact", async () => {
-//     render(
-//       <ThemeProvider>
-//         <App />
-//       </ThemeProvider>
-//     );
-//     const header = screen.getByText(/Unlock World-Class UI Power/i);
-//     expect(header).toBeInTheDocument();
+    const cards = screen.getAllByRole("button", { name: /Buy Plan/i });
+    expect(cards).toHaveLength(3);
 
-//     // Yearly toggle
-//     const yearlyToggle = screen.getByRole("switch", { name: /Toggle yearly/i }); // Assume ARIA
-//     fireEvent.click(yearlyToggle);
-//     await waitFor(() => expect(screen.getByText(/Save 17%/i)).toBeInTheDocument());
+    // Simulate purchase - expect confetti log or state change
+    fireEvent.click(cards[0]);
+    await waitFor(() => expect(screen.getByText(/Processing.../i)).toBeInTheDocument());
+  });
 
-//     const buyButtons = screen.getAllByRole("button", { name: /Buy Plan Now/i });
-//     expect(buyButtons).toHaveLength(3);
-//     act(() => fireEvent.click(buyButtons[0]));
-//     await waitFor(() => expect(screen.getByText(/Processing.../i)).toBeInTheDocument());
-//   });
+  test("charts lazy load and display data", async () => {
+    render(
+      <ThemeProvider>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </ThemeProvider>
+    );
 
-//   test("charts lazy load, display data, and handle filters/exports", async () => {
-//     render(
-//       <ThemeProvider>
-//         <App />
-//       </ThemeProvider>
-//     );
+    // Wait for lazy components
+    await waitFor(() => {
+      expect(screen.getByText(/Assignment Marks Progress/i)).toBeInTheDocument();
+      expect(screen.getByText(/Phone Price & Rating Comparison/i)).toBeInTheDocument();
+    });
+  });
 
-//     // Wait for lazy components
-//     await waitFor(() => {
-//       expect(screen.getByText(/Assignment Marks Progress/i)).toBeInTheDocument();
-//       expect(screen.getByText(/Phone Price & Rating Comparison/i)).toBeInTheDocument();
-//     });
+  test("footer subscription form validates and submits", async () => {
+    render(
+      <ThemeProvider>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </ThemeProvider>
+    );
 
-//     // Filter interaction (PhoneBar example)
-//     const filterSelect = screen.getByLabelText(/Filter by metric/i);
-//     fireEvent.change(filterSelect, { target: { value: "rating" } });
-//     await waitFor(() => expect(filterSelect).toHaveValue("rating"));
+    const emailInput = screen.getByPlaceholderText(/Enter your email/i);
+    const submitButton = screen.getByRole("button", { name: /Subscribe/i });
 
-//     // Export button
-//     const exportButton = screen.getByLabelText(/Export chart/i);
-//     fireEvent.click(exportButton);
-//   });
+    // Invalid email
+    fireEvent.change(emailInput, { target: { value: "invalid" } });
+    fireEvent.submit(emailInput.closest("form"));
+    await waitFor(() => expect(screen.getByText(/Please enter a valid email./i)).toBeInTheDocument());
 
-//   test("footer subscription form validates, submits, and triggers confetti", async () => {
-//     render(
-//       <ThemeProvider>
-//         <App />
-//       </ThemeProvider>
-//     );
+    // Valid email
+    fireEvent.change(emailInput, { target: { value: "user@example.com" } });
+    fireEvent.submit(emailInput.closest("form"));
+    await waitFor(() => expect(screen.getByText(/Subscribed Successfully!/i)).toBeInTheDocument());
+  });
 
-//     const emailInput = screen.getByPlaceholderText(/Enter your email for exclusive updates/i);
-//     const submitButton = screen.getByRole("button", { name: /Subscribe/i });
+  test("error boundary catches and displays gracefully", async () => {
+    // Mock error in a component (for test, use a faulty child)
+    const FaultyComponent = () => { throw new Error("Test error"); };
+    jest.spyOn(console, "error").mockImplementation(() => {});
+    render(
+      <ThemeProvider>
+        <MemoryRouter>
+          <ErrorBoundary>
+            <FaultyComponent />
+          </ErrorBoundary>
+        </MemoryRouter>
+      </ThemeProvider>
+    );
+    expect(screen.getByText(/Oops! Something Went Wrong/i)).toBeInTheDocument();
+    const retryButton = screen.getByRole("button", { name: /Retry/i });
+    expect(retryButton).toBeInTheDocument();
+  });
 
-//     // Invalid email
-//     fireEvent.change(emailInput, { target: { value: "invalid" } });
-//     fireEvent.submit(submitButton.closest("form"));
-//     await waitFor(() => expect(screen.getByText(/Please enter a valid email./i)).toBeInTheDocument());
+  test("responsive mobile menu opens/closes with backdrop", async () => {
+    render(
+      <ThemeProvider>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </ThemeProvider>
+    );
 
-//     // Valid email with confetti simulation
-//     fireEvent.change(emailInput, { target: { value: "user@example.com" } });
-//     fireEvent.submit(submitButton.closest("form"));
-//     await waitFor(() => expect(screen.getByText(/Subscribed Successfully!/i)).toBeInTheDocument());
-//   });
+    // Simulate mobile toggle
+    const mobileToggle = screen.getByLabelText(/Open menu/i); // Updated ARIA
+    fireEvent.click(mobileToggle);
+    await waitFor(() => expect(screen.getByTestId("mobile-menu")).toBeVisible());
 
-//   test("error boundary catches and displays gracefully with retry", async () => {
-//     // Mock error in a component
-//     jest.spyOn(console, "error").mockImplementation(() => {});
-//     const ThrowError = () => { throw new Error("Test Error"); };
-//     render(
-//       <ThemeProvider>
-//         <ErrorBoundary>
-//           <ThrowError />
-//         </ErrorBoundary>
-//       </ThemeProvider>
-//     );
-//     await waitFor(() => expect(screen.getByText(/Oops! Something Went Wrong/i)).toBeInTheDocument());
-//     const retryButton = screen.getByRole("button", { name: /Retry/i });
-//     fireEvent.click(retryButton);
-//     // Assume retry logic clears error
-//   });
+    const closeButton = screen.getByLabelText(/Close menu/i);
+    fireEvent.click(closeButton);
+    await waitFor(() => expect(screen.queryByTestId("mobile-menu")).not.toBeVisible());
+  });
 
-//   test("responsiveness: checks mobile vs desktop layouts", () => {
-//     // Mock mobile viewport
-//     global.innerWidth = 500;
-//     render(
-//       <ThemeProvider>
-//         <App />
-//       </ThemeProvider>
-//     );
-//     expect(screen.getByRole("button", { name: /Open menu/i })).toBeVisible(); // Mobile toggle
+  test("mega menu appears on hover for desktop", async () => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation(query => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(), // Deprecated
+        removeListener: jest.fn(), // Deprecated
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
 
-//     // Mock desktop
-//     global.innerWidth = 1024;
-//     fireEvent.resize(window);
-//     expect(screen.queryByRole("button", { name: /Open menu/i })).not.toBeInTheDocument();
-//   });
-// });
+    render(
+      <ThemeProvider>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </ThemeProvider>
+    );
+
+    // Mock hover on Product link
+    const productLink = screen.getByText(/Product/i);
+    fireEvent.mouseEnter(productLink);
+    await waitFor(() => expect(screen.getByText(/Overview/i)).toBeInTheDocument()); // Subitem
+  });
+
+  test("theme toggle cycles through available themes", async () => {
+    render(
+      <ThemeProvider>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </ThemeProvider>
+    );
+
+    const toggleButton = screen.getByLabelText(/Switch to next theme/i);
+    fireEvent.click(toggleButton);
+    await waitFor(() => {
+      // Expect class change or title update
+      expect(document.documentElement).toHaveAttribute("data-theme", expect.stringMatching(/^(light|dark|cupcake)$/));
+    });
+  });
+});

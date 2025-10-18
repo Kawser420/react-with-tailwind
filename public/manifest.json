@@ -22,10 +22,16 @@
       "type": "image/png",
       "sizes": "196x196",
       "purpose": "maskable any"
+    },
+    {
+      "src": "logo72.png",
+      "type": "image/png",
+      "sizes": "72x72"
     }
   ],
   "start_url": ".",
   "display": "standalone",
+  "scope": "/",
   "theme_color": "#3b82f6",
   "background_color": "#ffffff",
   "orientation": "portrait-primary",
@@ -39,10 +45,17 @@
       "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Charts Dashboard",
-      "short_name": "Charts",
-      "description": "View interactive data visualizations",
-      "url": "/#charts",
+      "name": "Product Features",
+      "short_name": "Features",
+      "description": "Explore advanced UI tools",
+      "url": "/product",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Quick Search",
+      "short_name": "Search",
+      "description": "Search products and orders",
+      "url": "/#search",
       "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
     }
   ]

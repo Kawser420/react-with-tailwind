@@ -2,11 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Base Layer Enhancements - Professional foundation */
+/* Base Layer Enhancements - Expanded for Accessibility & Performance */
 @layer base {
   html {
     scroll-behavior: smooth;
-    -webkit-tap-highlight-color: transparent;
+    scroll-padding-top: 4rem; /* Account for fixed navbar */
   }
 
   body {
@@ -16,33 +16,34 @@
       "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    line-height: 1.6;
+    line-height: 1.7;
     color: theme("colors.base-content");
     background-color: theme("colors.base-200");
-    transition: background-color 0.3s ease-out;
   }
 
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
       monospace;
-    background: theme("colors.base-300");
-    padding: 0.2em 0.4em;
-    border-radius: 4px;
   }
 
-  /* Focus Visible for Accessibility - Expanded */
+  /* Enhanced Focus Visible for Accessibility */
   *:focus-visible {
-    /* outline: 3px solid theme("colors.primary.500"); */
+    outline: 3px solid theme("colors.primary.500");
     outline-offset: 3px;
-    /* box-shadow: 0 0 0 3px theme("colors.primary.300"); */
+    border-radius: 0.5rem;
+  }
+
+  /* RTL Support */
+  [dir="rtl"] .parallax-layer {
+    direction: rtl;
   }
 }
 
-/* Component Layer - Custom Buttons, Cards - Expanded with effects */
+/* Component Layer - Enhanced Buttons, Cards with 3D Transforms */
 @layer components {
   .btn-modern {
-    @apply relative overflow-hidden rounded-lg shadow-md hover:shadow-lg;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    @apply relative overflow-hidden transition-all duration-300 ease-out-cubic;
+    transform-style: preserve-3d;
   }
 
   .btn-modern::before {
@@ -50,7 +51,7 @@
     position: absolute;
     top: 0;
     left: -100%;
-    width: 200%;
+    width: 100%;
     height: 100%;
     background: linear-gradient(
       90deg,
@@ -58,15 +59,20 @@
       rgba(255, 255, 255, 0.3),
       transparent
     );
-    transition: left 0.6s ease-out;
+    transition: left 0.6s ease;
+    z-index: -1;
   }
 
   .btn-modern:hover::before {
     left: 100%;
   }
 
+  .btn-modern:hover {
+    transform: translateY(-2px) rotateX(5deg);
+  }
+
   .card-premium {
-    @apply bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-500 ease-out-cubic rounded-xl;
+    @apply bg-base-100 shadow-2xl hover:shadow-3xl transition-all duration-700 ease-out-cubic relative overflow-hidden;
     transform-style: preserve-3d;
   }
 
@@ -76,73 +82,108 @@
     inset: 0;
     background: linear-gradient(
       45deg,
-      transparent 20%,
+      transparent 30%,
       rgba(59, 130, 246, 0.15) 50%,
-      transparent 80%
+      transparent 70%
     );
     opacity: 0;
     transition: opacity 0.4s ease;
+    z-index: -1;
   }
 
   .card-premium:hover::after {
     opacity: 1;
   }
-}
 
-/* Utilities Layer - Expanded Animations, Transforms */
-@layer utilities {
-  .animate-fade-in {
-    animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  .card-premium:hover {
+    transform: translateY(-10px) rotateX(8deg) scale(1.02);
   }
 
-  .animate-spin-slow {
-    animation: spin-slow 5s linear infinite;
+  /* Floating Particles Global */
+  .particles-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                      radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+    animation: float 20s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+  }
+}
+
+/* Utilities Layer - Expanded with Parallax & Ripple */
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   }
 
   .animate-bounce-slow {
-    animation: bounce-slow 3s infinite ease-in-out;
+    animation: bounceSlow 2.5s infinite ease-in-out;
   }
 
   .animate-pulse-gentle {
-    animation: pulse-gentle 4s ease-in-out infinite;
+    animation: pulseGentle 4s ease-in-out infinite;
+  }
+
+  .animate-spin-slow {
+    animation: spinSlow 5s linear infinite;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
   }
 
   .gradient-text {
     background: linear-gradient(
       to right,
       var(--fallback-pb, oklch(65% 0.25 160)),
-      var(--fallback-pc, oklch(55% 0.3 240))
+      var(--fallback-pc, oklch(55% 0.3 240)),
+      var(--fallback-pa, oklch(75% 0.2 300))
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    background-size: 300% 300%;
+    animation: gradient-shift 4s ease infinite;
   }
 
-  /* Parallax Effect - 3D Enhanced */
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  /* Enhanced Parallax Effect */
   .parallax {
-    transition: transform 0.2s ease-out;
-    will-change: transform;
+    transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
   }
 
   .parallax:hover {
-    transform: translateZ(30px) rotateY(10deg);
+    transform: translateZ(30px) rotateY(5deg);
   }
 
-  /* Ripple Effect Global - Vanilla JS compatible */
+  /* Ripple Effect Global - Vanilla JS Compatible */
   .ripple {
     position: absolute;
     border-radius: 50%;
     background: currentColor;
     opacity: 0.4;
     animation: ripple-animation 0.7s linear forwards;
+    pointer-events: none;
+    z-index: 10;
   }
 }
 
-/* Define Keyframes - More precise easing */
+/* Define Keyframes - Expanded */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(40px) scale(0.98);
+    transform: translateY(40px) scale(0.97);
   }
   to {
     opacity: 1;
@@ -150,7 +191,7 @@
   }
 }
 
-@keyframes spin-slow {
+@keyframes spinSlow {
   from {
     transform: rotate(0deg);
   }
@@ -159,46 +200,55 @@
   }
 }
 
-@keyframes bounce-slow {
-  0%,
-  100% {
+@keyframes bounceSlow {
+  0%, 100% {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-12px);
+    transform: translateY(-15px);
   }
 }
 
-@keyframes pulse-gentle {
-  0%,
-  100% {
+@keyframes pulseGentle {
+  0%, 100% {
     opacity: 1;
     transform: scale(1);
   }
   50% {
-    opacity: 0.65;
+    opacity: 0.8;
     transform: scale(1.04);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-30px) rotate(180deg);
   }
 }
 
 @keyframes ripple-animation {
   to {
-    transform: scale(5);
+    transform: scale(6);
     opacity: 0;
   }
 }
 
-/* Theme-Specific Overrides - Expanded for more themes */
+/* Theme-Specific Overrides - Enhanced */
 [data-theme="dark"] {
   --tw-bg-opacity: 1;
   background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+  color: theme("colors.base-content");
 }
 
-[data-theme="cupcake"] .gradient-text {
-  background: linear-gradient(135deg, #f472b6, #fbbf24);
+[data-theme="dark"] .particles-container::before {
+  background-image: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.2) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.2) 0%, transparent 50%);
 }
 
-/* Print Styles for Professional PDFs - Expanded */
+/* Print Styles for Professional PDFs - Enhanced */
 @media print {
   .no-print {
     display: none !important;
@@ -206,21 +256,20 @@
   body {
     background: white !important;
     color: black !important;
-    font-size: 12pt;
+    -webkit-print-color-adjust: exact;
   }
   .gradient-text {
-    -webkit-print-color-adjust: exact;
     color-adjust: exact;
-    background: none;
-    color: #000 !important;
+    background: none !important;
+    color: #3b82f6 !important;
   }
-  a {
-    color: blue !important;
-    text-decoration: underline;
+  .card-premium {
+    box-shadow: none !important;
+    transform: none !important;
   }
 }
 
-/* Respect Reduced Motion - Accessibility Pro */
+/* Respect Reduced Motion - Global */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -228,6 +277,9 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transform: none !important;
+  }
+  .parallax, .hover-scale {
     transform: none !important;
   }
 }

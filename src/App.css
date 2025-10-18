@@ -1,9 +1,10 @@
 .App {
   text-align: center;
   min-height: 100vh;
+  background: linear-gradient(to bottom, var(--fallback-pb, oklch(98% 0.01 240)), var(--fallback-pc, oklch(95% 0.02 200)));
 }
 
-/* Legacy Logo Animation - Kept for compatibility and expanded for smoothness */
+/* Legacy Logo Animation - Kept for compatibility */
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -39,21 +40,21 @@
   }
 }
 
-/* World-Class Global Styles - Expanded with CSS3 transforms and transitions */
+/* World-Class Global Styles with Enhanced Transforms */
 .App > * {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform, opacity, box-shadow;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
 }
 
-/* Custom CSS3 Animations & Transforms - More advanced with easing */
-@keyframes fade-in {
+/* Expanded CSS3 Animations & Transforms */
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(50px) scale(0.95);
+    transform: translateY(30px) scale(0.98) rotateX(5deg);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0) scale(1) rotateX(0deg);
   }
 }
 
@@ -67,43 +68,46 @@
 }
 
 @keyframes bounce-slow {
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
+  0%, 20%, 50%, 80%, 100% {
     transform: translateY(0);
   }
   40% {
-    transform: translateY(-15px);
+    transform: translateY(-12px);
   }
   60% {
-    transform: translateY(-7px);
+    transform: translateY(-6px);
   }
 }
 
 @keyframes pulse-gentle {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 1;
     transform: scale(1);
   }
   50% {
     opacity: 0.6;
-    transform: scale(1.05);
+    transform: scale(1.06);
   }
 }
 
 @keyframes shake {
-  0%,
-  100% {
+  0%, 100% {
     transform: translateX(0);
   }
   25% {
-    transform: translateX(-7px);
+    transform: translateX(-6px);
   }
   75% {
-    transform: translateX(7px);
+    transform: translateX(6px);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-25px) rotate(180deg);
   }
 }
 
@@ -114,9 +118,9 @@
   }
 }
 
-/* Utility Classes - Expanded for responsiveness */
+/* Utility Classes - Expanded */
 .animate-fade-in {
-  animation: fade-in 0.8s ease-out forwards;
+  animation: fadeIn 0.8s ease-out forwards;
 }
 
 .animate-spin-slow {
@@ -128,49 +132,59 @@
 }
 
 .animate-pulse-gentle {
-  animation: pulse-gentle 3.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse-gentle 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .animate-shake {
   animation: shake 0.6s ease-in-out;
 }
 
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
 .gradient-text {
-  background: linear-gradient(
-    135deg,
-    theme("colors.primary.500"),
-    theme("colors.secondary.500")
-  );
+  background: linear-gradient(135deg, theme(colors.primary.500), theme(colors.secondary.500), theme(colors.accent.500));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 .hover-scale {
-  transition: transform 0.4s ease-in-out, box-shadow 0.4s;
+  transition: transform 0.4s ease-in-out;
 }
 
 .hover-scale:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  transform: scale(1.06) rotate(1deg);
 }
 
-/* Parallax Layer - Enhanced with 3D */
+/* Parallax Layer Enhanced */
 .parallax-layer {
-  transition: transform 0.15s ease-out;
+  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
 }
 
 .parallax-layer:hover {
-  transform: translateY(-10px) scale(1.03) rotateX(5deg);
+  transform: translateY(-8px) scale(1.03) rotateX(2deg);
 }
 
-/* DaisyUI Overrides for Themes - More customizations */
+/* DaisyUI Overrides for Themes - Expanded Dark Mode */
 [data-theme="dark"] .gradient-text {
-  background: linear-gradient(135deg, #60a5fa, #a78bfa);
+  background: linear-gradient(135deg, #60a5fa, #a78bfa, #10b981);
 }
 
-/* Reduced Motion Support - Professional accessibility */
+[data-theme="dark"] .parallax-layer {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Reduced Motion Support - Respect User Prefs */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -179,6 +193,7 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+    transform: none !important;
   }
   .motion-reduce {
     animation: none !important;
@@ -186,7 +201,7 @@
   }
 }
 
-/* Custom Scrollbar for Modern Look - Expanded for dark mode */
+/* Custom Scrollbar for Modern Look - Enhanced */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -206,10 +221,23 @@
   background: theme("colors.primary.600");
 }
 
-[data-theme="dark"] ::-webkit-scrollbar-track {
-  background: #1f2937;
-}
-
-[data-theme="dark"] ::-webkit-scrollbar-thumb {
-  background: #3b82f6;
+/* Print Styles Enhanced for Professional PDFs */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 12pt;
+  }
+  .gradient-text {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+    background: none !important;
+    color: #3b82f6 !important;
+  }
+  .card {
+    box-shadow: none !important;
+  }
 }
